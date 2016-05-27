@@ -1,9 +1,9 @@
 
 const electron = require('electron');
 // Module to control application life.
-const {app} = electron;
+const { app } = electron;
 // Module to create native browser window.
-const {BrowserWindow} = electron;
+const { BrowserWindow } = electron;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -41,6 +41,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
+  console.log('app activate');
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
