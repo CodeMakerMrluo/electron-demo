@@ -4,6 +4,8 @@ const electron = require('electron');
 const { app } = electron;
 // Module to create native browser window.
 const { BrowserWindow } = electron;
+// ipcMain
+const { ipcMain } = electron;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,6 +26,22 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
+  
+  // sending messages from the main process to the renderer process
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.send('main-process-messages', 'webContents event "did-finish-load" called');
+  });
+  
+  // 监听Renderer Process的消息。
+  ipcMain.on('asynchronous-message', (event, arg) => {
+    // 返回消息
+    event.sender.send('asynchronous-reply', 'pong');
+    event.returnValue = 'asynchronous-return-value';
+  });
+
+  ipcMain.on('synchronous-message', (event, arg) => {
+    event.returnValue = 'pong';
+  });
 }
 
 // This method will be called when Electron has finished
@@ -41,7 +59,6 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  console.log('app activate');
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
