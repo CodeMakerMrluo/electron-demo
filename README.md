@@ -23,11 +23,56 @@ electron由Chromium负责页面的显示。所以当显示一个页面时，就�
 然后创建`launch.json`用于监听Node.js的调试信息。思路就是设置监听5858端口（tasks.json中设置的debug端口）。   
 设置完成后，按F5就可以开始调试demo的Main Process。      
 
+# demo03
+Main Process和Renderer Process由于负责的功能不同，会有需要通信的需要。在electron中，两者的通信可以有两种方法：
+
+## ipcMain 和 ipcRenderer
+用于Renderer Process主动向Main Process发送消息。有同步和异步两种方式。具体代码如下：
+```
+// Renderer Process
+const ipcRenderer = require('electron').ipcRenderer;
+// 同步消息，会直接打印Main Process返回的信息
+console.log(require('electron').ipcRenderer.sendSync(synchronous-message', 'ping'));
+
+// 异步消息，返回信息通过一个新消息传递。
+// 监听Main Process的返回信息
+ipcRenderer.on('asynchronous-reply', (event, arg) => {
+  console.log('asynchronous-reply: %O %O', event, arg);
+});
+// 发送信息给Main Process
+pcRenderer.send('asynchronous-message', 'ping');
+```
+```
+// 监听同步消息
+ipcMain.on('synchronous-message', (event, arg) => {
+  event.returnValue = 'pong';  // 返回信息
+});
+
+// 监听异步消息
+ipcMain.on('asynchronous-message', (event, arg) => {
+  event.sender.send('asynchronous-reply', 'pong');  // 以新消息方式返回
+});
+
+```
+
+## webContents 和 ipcRenderer
+这种方式是Main Process主动向Renderer Process发生消息。
+```
+// Main Process
+// 当页面的加载结束，触发webContents的`did-finish-load`事件，在该事件中向Renderer Process发送信息。
+win.webContents.on('did-finish-load', () => {
+  win.webContents.send('main-process-messages', 'webContents event "did-finish-load" called');
+});
+```
+```
+// Renderer Process
+// 监听Main Process中的webContents发送的信息。
+ipcRenderer.on('main-process-messages', (event, message) => {
+  console.log('message from Main Process: ' , message);  // Prints Main Process Message.
+});
+```
 
 
-
-> 实现多个页面，以及页面间的消息通讯
->   管理子窗口
 > 菜单如何创建，以及页面与菜单间的通讯
 > 页面与系统功能的交互
 > 全局快捷键
