@@ -72,6 +72,13 @@ ipcRenderer.on('main-process-messages', (event, message) => {
 });
 ```
 
+# demo04
+electron提供来webView标签用于加载web页面。通过如下代码可以加载一个taobao页面。
+```
+<webview src="https://www.taobao.com/" style="display:inline-flex;"></webview>
+```
+
+
 
 > 菜单如何创建，以及页面与菜单间的通讯
 > 页面与系统功能的交互

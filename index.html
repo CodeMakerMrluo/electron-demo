@@ -9,6 +9,9 @@
     We are using node <script>document.write(process.versions.node)</script>,<br />
     Chrome <script>document.write(process.versions.chrome)</script>,<br />
     and Electron <script>document.write(process.versions.electron)</script>.<br />
+    <webview id="foo" src="https://www.taobao.com/" style="display:inline-flex; width:640px; height:480px">
+      <span id="indicator"></span>
+    </webview>
     <script>
       const electron = require('electron');
       const ipcRenderer = electron.ipcRenderer;
@@ -26,6 +29,24 @@
         console.log('asynchronous-reply: %O %O', event, arg);
       });
       console.log('asynchronous-reply return value: ', ipcRenderer.send('asynchronous-message', 'ping'));
+    </script>
+    <script>
+      // webview标签逻辑
+      onload = () => {
+        const webview = document.getElementById('foo');
+        const indicator = document.querySelector('#indicator');
+
+        const loadstart = () => {
+          indicator.innerText = 'loading...';
+        };
+
+        const loadstop = () => {
+          indicator.innerText = '';
+        };
+
+        webview.addEventListener('did-start-loading', loadstart);
+        webview.addEventListener('did-stop-loading', loadstop);
+      };
     </script>
   </body>
 </html>
