@@ -81,8 +81,10 @@ electron提供来webView标签用于加载web页面。通过如下代码可以�
 应用中经常需要菜单来进行快速操作。electron的Main Process中的Menu接口就是用于创建系统菜单和邮件菜单的。
 具体代码见例子。
 
+# demo06
+系统快捷键使用`globalShortcut`接口。
+系统消息使用HTML5的Notification。
+任务栏进度使用BrowserWindow.setProgressBar来设置。
 
-> 菜单如何创建，以及页面与菜单间的通讯
+
 > 页面与系统功能的交互
-> 全局快捷键
-> 桌面环境介绍

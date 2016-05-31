@@ -6,6 +6,10 @@ const { app } = electron;
 const { BrowserWindow } = electron;
 // ipcMain
 const { ipcMain } = electron;
+// globalShortcut
+const { globalShortcut } = electron;
+// menu
+const { Menu } = electron;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -26,6 +30,7 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
+  win.setProgressBar(0.3);
   
   // sending messages from the main process to the renderer process
   win.webContents.on('did-finish-load', () => {
@@ -42,6 +47,30 @@ function createWindow() {
   ipcMain.on('synchronous-message', (event, arg) => {
     event.returnValue = 'pong';
   });
+  
+  // globalShortcut
+  // Register a 'CommandOrControl+X' shortcut listener.
+  const ret = globalShortcut.register('CommandOrControl+X', () => {
+    console.log('CommandOrControl+X is pressed');
+  });
+
+  if (!ret) {
+    console.log('registration failed');
+  }
+
+  // Check whether a shortcut is registered.
+  console.log(globalShortcut.isRegistered('CommandOrControl+X'));
+  
+  // dock Menu
+  const dockMenu = Menu.buildFromTemplate([
+    { label: 'New Window', click() { console.log('New Window'); } },
+    { label: 'New Window with Settings', submenu: [
+      { label: 'Basic' },
+      { label: 'Pro'}
+    ]},
+    { label: 'New Command...'}
+  ]);
+  app.dock.setMenu(dockMenu);
 }
 
 // This method will be called when Electron has finished
@@ -56,6 +85,14 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+// 程序退出前注销注册的快捷键
+app.on('will-quit', () => {
+  // Unregister a shortcut.
+  globalShortcut.unregister('CommandOrControl+X');
+
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll();
 });
 
 app.on('activate', () => {
