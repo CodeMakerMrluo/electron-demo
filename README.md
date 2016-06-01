@@ -86,5 +86,12 @@ electron提供来webView标签用于加载web页面。通过如下代码可以�
 系统消息使用HTML5的Notification。
 任务栏进度使用BrowserWindow.setProgressBar来设置。
 
+# demo07
+NativeImage可以用于修改默认图片。
+使用Tray可以修改消息栏中的icon和菜单
+`app.dock.setIcon`可以设置dock上显示的图片，（demo中一直没有成功）
+`app.dock.setBadge`可以对dock上应用图片添加文字描述。
+
+
 
 > 页面与系统功能的交互

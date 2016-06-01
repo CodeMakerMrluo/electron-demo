@@ -10,15 +10,22 @@ const { ipcMain } = electron;
 const { globalShortcut } = electron;
 // menu
 const { Menu } = electron;
+// Tray
+const { Tray } = electron;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
+// Tray
+let appIcon = null;
+
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({width: 800, height: 600});
-
+  // win.setOverlayIcon('./imgs/ico.png', 'Description for overlay');
+  // app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
+  app.dock.setBadge('99+');
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/index.html`);
 
@@ -59,7 +66,7 @@ function createWindow() {
   }
 
   // Check whether a shortcut is registered.
-  console.log(globalShortcut.isRegistered('CommandOrControl+X'));
+  // console.log(globalShortcut.isRegistered('CommandOrControl+X'));
   
   // dock Menu
   const dockMenu = Menu.buildFromTemplate([
@@ -71,6 +78,17 @@ function createWindow() {
     { label: 'New Command...'}
   ]);
   app.dock.setMenu(dockMenu);
+  
+  // Tray
+  const contextMenuTray = Menu.buildFromTemplate([
+    {label: 'Item1', type: 'radio'},
+    {label: 'Item2', type: 'radio'},
+    {label: 'Item3', type: 'radio', checked: true},
+    {label: 'Item4', type: 'radio'}
+  ]);
+  appIcon = new Tray('./imgs/ico.png');
+  appIcon.setToolTip('This is my application.');
+  appIcon.setContextMenu(contextMenuTray);
 }
 
 // This method will be called when Electron has finished
