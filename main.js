@@ -25,7 +25,7 @@ function createWindow() {
   win = new BrowserWindow({width: 800, height: 600});
   // win.setOverlayIcon('./imgs/ico.png', 'Description for overlay');
   // app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
-  app.dock.setBadge('99+');
+  
   // and load the index.html of the app.
   win.loadURL(`file://${__dirname}/index.html`);
 
@@ -68,17 +68,6 @@ function createWindow() {
   // Check whether a shortcut is registered.
   // console.log(globalShortcut.isRegistered('CommandOrControl+X'));
   
-  // dock Menu
-  const dockMenu = Menu.buildFromTemplate([
-    { label: 'New Window', click() { console.log('New Window'); } },
-    { label: 'New Window with Settings', submenu: [
-      { label: 'Basic' },
-      { label: 'Pro'}
-    ]},
-    { label: 'New Command...'}
-  ]);
-  app.dock.setMenu(dockMenu);
-  
   // Tray
   const contextMenuTray = Menu.buildFromTemplate([
     {label: 'Item1', type: 'radio'},
@@ -89,12 +78,28 @@ function createWindow() {
   appIcon = new Tray('./imgs/ico.png');
   appIcon.setToolTip('This is my application.');
   appIcon.setContextMenu(contextMenuTray);
+  
+  app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
+app.dock.setBadge('66+');
+// app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
+// dock Menu
+const dockMenu = Menu.buildFromTemplate([
+  { label: 'New Window', click() { console.log('New Window'); } },
+  { label: 'New Window with Settings', submenu: [
+    { label: 'Basic' },
+    { label: 'Pro'}
+  ]},
+  { label: 'New Command...'}
+]);
+app.dock.setMenu(dockMenu);
+// app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
