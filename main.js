@@ -75,11 +75,11 @@ function createWindow() {
     {label: 'Item3', type: 'radio', checked: true},
     {label: 'Item4', type: 'radio'}
   ]);
-  appIcon = new Tray('./imgs/ico.png');
+  appIcon = new Tray(`/${__dirname}/imgs/ico.png`);
   appIcon.setToolTip('This is my application.');
   appIcon.setContextMenu(contextMenuTray);
   
-  app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
+  // app.dock.setIcon(`/${__dirname}/imgs/ico.png`);
 }
 
 // This method will be called when Electron has finished
@@ -87,7 +87,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 app.dock.setBadge('66+');
-// app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
+// app.dock.setIcon(`/${__dirname}/imgs/ico.png`);
 // dock Menu
 const dockMenu = Menu.buildFromTemplate([
   { label: 'New Window', click() { console.log('New Window'); } },
@@ -98,7 +98,7 @@ const dockMenu = Menu.buildFromTemplate([
   { label: 'New Command...'}
 ]);
 app.dock.setMenu(dockMenu);
-// app.dock.setIcon('/Users/chenhao/code/github/electron-demo/imgs/ico.png');
+// app.dock.setIcon(`/${__dirname}/imgs/ico.png`);
 
 
 // Quit when all windows are closed.

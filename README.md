@@ -92,6 +92,11 @@ NativeImage可以用于修改默认图片。
 `app.dock.setIcon`可以设置dock上显示的图片，（demo中一直没有成功）
 `app.dock.setBadge`可以对dock上应用图片添加文字描述。
 
-
-
-> 页面与系统功能的交互
+# demo08
+完成功能后，可以使用`electron-packager`进行打包。electron-packager相关信息可以去[这里](https://github.com/electron-userland/electron-packager)了解。   
+基本步骤：
+1. 安装`electron-packager`到全局
+2. 使用命令`electron-packager <sourcedir> <appname> --platform=<platform> --arch=<arch> [optional flags...]`对sourcedir进行打包。其中platform有`darwin`, `linux`, `mas`, `win32`几种情况，arch有`ia32`, `x64`两种情况。
+注意： 
+1. 打包后路径不能再使用相对路径，需要改成"`${__dirname}\images\img.png`"。
+2. package.json中的`productName`可以直接指定打包后的名字。
